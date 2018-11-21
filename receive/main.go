@@ -26,7 +26,7 @@ func main() {
 	err = ch.ExchangeDeclare(
 		exchangeName,        // name
 		amqp.ExchangeFanout, // type
-		false,               // durable
+		true,                // durable
 		false,               // auto-deleted
 		false,               // internal
 		false,               // no-wait
@@ -36,7 +36,7 @@ func main() {
 
 	q, err := ch.QueueDeclare(
 		exchangeName, // name
-		false,        // durable
+		true,         // durable
 		false,        // delete when unused
 		false,        // exclusive
 		false,        // no-wait

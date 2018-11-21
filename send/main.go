@@ -27,7 +27,7 @@ func main() {
 	err = ch.ExchangeDeclare(
 		exchangeName,        // name
 		amqp.ExchangeFanout, // type
-		false,               // durable
+		true,                // durable
 		false,               // auto-deleted
 		false,               // internal
 		false,               // no-wait
@@ -55,8 +55,9 @@ func publish(ch *amqp.Channel, exchangeName string, message []byte) {
 		false,        // mandatory
 		false,        // immediate
 		amqp.Publishing{
-			ContentType: "application/json",
-			Body:        message,
+			ContentType:  "application/json",
+			DeliveryMode: 2,
+			Body:         message,
 		})
 	failOnError(err, "Failed to publish a message")
 }
