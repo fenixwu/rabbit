@@ -6,8 +6,6 @@ import (
 	"github.com/streadway/amqp"
 )
 
-const exchangeName = "test"
-
 func failOnError(err error, msg string) {
 	if err != nil {
 		log.Fatalf("%s: %s", msg, err)
@@ -24,7 +22,7 @@ func main() {
 	defer ch.Close()
 
 	err = ch.ExchangeDeclare(
-		exchangeName,        // name
+		"test",              // name
 		amqp.ExchangeFanout, // type
 		true,                // durable
 		false,               // auto-deleted
@@ -35,7 +33,7 @@ func main() {
 	failOnError(err, "Failed to declare an exchange")
 
 	q, err := ch.QueueDeclare(
-		exchangeName, // name
+		"task_queue", // name
 		true,         // durable
 		false,        // delete when unused
 		false,        // exclusive
@@ -45,11 +43,11 @@ func main() {
 	failOnError(err, "Failed to declare a queue")
 
 	err = ch.QueueBind(
-		q.Name,       // queue name
-		"",           // routing key
-		exchangeName, // exchange
-		false,        // no-wait
-		nil,          // arguments
+		q.Name, // queue name
+		"",     // routing key
+		"test", // exchange
+		false,  // no-wait
+		nil,    // arguments
 	)
 	failOnError(err, "Failed to bind a queue")
 

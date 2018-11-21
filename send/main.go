@@ -7,8 +7,6 @@ import (
 	"github.com/streadway/amqp"
 )
 
-const exchangeName = "test"
-
 func failOnError(err error, msg string) {
 	if err != nil {
 		log.Fatalf("%s: %s", msg, err)
@@ -25,7 +23,7 @@ func main() {
 	defer ch.Close()
 
 	err = ch.ExchangeDeclare(
-		exchangeName,        // name
+		"test",              // name
 		amqp.ExchangeFanout, // type
 		true,                // durable
 		false,               // auto-deleted
@@ -44,16 +42,16 @@ func main() {
 		msg := message{"YO", i}
 		data, err := json.Marshal(&msg)
 		failOnError(err, "Marshal error")
-		publish(ch, exchangeName, []byte(data))
+		publish(ch, "test", []byte(data))
 	}
 }
 
 func publish(ch *amqp.Channel, exchangeName string, message []byte) {
 	err := ch.Publish(
-		exchangeName, // exchange
-		"",           // routing key
-		false,        // mandatory
-		false,        // immediate
+		"test", // exchange
+		"",     // routing key
+		false,  // mandatory
+		false,  // immediate
 		amqp.Publishing{
 			ContentType:  "application/json",
 			DeliveryMode: 2,
